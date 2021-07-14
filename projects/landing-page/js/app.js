@@ -18,10 +18,13 @@
  * 
 */
 const pageHeader = document.querySelector('.page__header');
+const pageFooter = document.querySelector('.page__footer');
 const sectionTitles = Array.from(document.querySelectorAll('.section__title'));
 const navBarList = document.querySelector('#navbar__list');
 var menuList;
 const intersectionObserver = new IntersectionObserver(intersectionObserverCallback, { threshold: 1 });
+const footerIntersectionObserver = new IntersectionObserver(bottomReached, { threshold: 0.1 });
+const toTopButton = document.querySelector('.scroll__top');
 var lastScrollPositionY = 0;
 /**
  * End Global Variables
@@ -43,6 +46,15 @@ function intersectionObserverCallback(entry) {
     }
 }
 
+function bottomReached(e) {
+    if (e[0].intersectionRatio >= 0.1) {
+        toTopButton.classList.add('to-top-visible');
+    } else {
+        toTopButton.classList.remove('to-top-visible');
+    }
+}
+
+footerIntersectionObserver.observe(pageFooter);
 
 /**
  * End Helper Functions
@@ -80,7 +92,6 @@ function addSectionTitleObserver() {
 // Build menu 
 document.addEventListener('DOMContentLoaded', () => {
     populateNavBar();
-    const menuList = Array.from(navBarList.querySelectorAll('.menu__link'));
 })
 
 // Scroll to section on link click
@@ -89,9 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // Set sections as active
 addSectionTitleObserver();
 
-//I am stuck here
-//Hide navigation menu when scrolling down and show it when scrolling up
 
+//Hide navigation menu when scrolling down and show it when scrolling up
 window.addEventListener('scroll', (e) => {
     if (lastScrollPositionY - window.scrollY < 0) {
         pageHeader.classList.add('hide');
