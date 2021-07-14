@@ -216,6 +216,14 @@ section.your-active-class .landing__container::after {
     animation: rotate 5s linear 0s infinite forwards reverse;
 }
 
+.hide {
+    animation: hide_menu 0.5s linear 0s forwards;
+}
+
+.show {
+    animation: show_menu 0.1s linear 0s forwards;
+}
+
 /* Section Active Styles Keyframe Animations */
 @keyframes rotate {
 	from {
@@ -228,4 +236,24 @@ section.your-active-class .landing__container::after {
 		           translate(-1em) 
 		           rotate(-360deg);
 	}
+}
+
+@keyframes hide_menu {
+    0% {
+        transform: translateY(0%);
+    }
+
+    100% {
+        transform: translateY(-100%);
+    }
+}
+
+@keyframes show_menu {
+    0% {
+        transform: translateY(-100%);
+    }
+
+    100% {
+        transform: translateY(0%);
+    }
 }

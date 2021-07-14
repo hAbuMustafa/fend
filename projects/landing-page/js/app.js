@@ -17,24 +17,25 @@
  * Define Global Variables
  * 
 */
+const pageHeader = document.querySelector('.page__header');
 const sectionTitles = Array.from(document.querySelectorAll('.section__title'));
 const navBarList = document.querySelector('#navbar__list');
 var menuList;
-const intersectionObserver = new IntersectionObserver(intersectionObserverCallback, {threshold: 0.5});
+const intersectionObserver = new IntersectionObserver(intersectionObserverCallback, { threshold: 1 });
+var lastScrollPositionY = 0;
 /**
  * End Global Variables
  * Start Helper Functions
  * 
  */
-function intersectionObserverCallback(entry){
-    const target = entry[0].target;
-    if (entry[0].intersectionRatio>=0.5){
+function intersectionObserverCallback(entry) {
+    const target = entry[0].target.parentElement.parentElement;
+    if (entry[0].intersectionRatio === 1) {
         target.classList.add('your-active-class');
-        for (navItem of menuList){
-            if(navItem.firstChild.innerText === target.getAttribute('data-nav')){
+        for (navItem of menuList) {
+            navItem.classList.remove('active');
+            if (navItem.querySelector('li').innerText === target.getAttribute('data-nav')) {
                 navItem.classList.add('active');
-            } else {
-                navItem.classList.remove('active');
             }
         }
     } else {
@@ -50,21 +51,19 @@ function intersectionObserverCallback(entry){
  */
 
 // build the nav
-function populateNavBar(){
-    sectionTitles.forEach((sectionTitle)=> {
+function populateNavBar() {
+    sectionTitles.forEach((sectionTitle) => {
         let listItem = `<a href="#${sectionTitle.id}" class='menu__link'><li>${sectionTitle.getAttribute('data-nav')}</li></a>`;
-        navBarList.innerHTML+=listItem;
+        navBarList.innerHTML += listItem;
     })
     menuList = Array.from(navBarList.querySelectorAll('.menu__link'));
 }
 
 
-
-
 // Add class 'active' to section when near top of viewport
-function addSectionTitleObserver(){
-    for (sectionTitle of sectionTitles){
-        intersectionObserver.observe(sectionTitle);
+function addSectionTitleObserver() {
+    for (sectionTitle of sectionTitles) {
+        intersectionObserver.observe(sectionTitle.querySelector('h2'));
     }
 }
 
@@ -79,8 +78,9 @@ function addSectionTitleObserver(){
 */
 
 // Build menu 
-document.addEventListener('DOMContentLoaded', ()=>{
+document.addEventListener('DOMContentLoaded', () => {
     populateNavBar();
+    const menuList = Array.from(navBarList.querySelectorAll('.menu__link'));
 })
 
 // Scroll to section on link click
@@ -88,3 +88,29 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 // Set sections as active
 addSectionTitleObserver();
+
+//I am stuck here
+//Hide navigation menu when scrolling down and show it when scrolling up
+
+window.addEventListener('scroll', (e) => {
+    if (lastScrollPositionY - window.scrollY < 0) {
+        pageHeader.classList.add('hide');
+        pageHeader.classList.remove('show');
+    } else {
+        pageHeader.classList.add('show');
+        pageHeader.classList.remove('hide');
+
+        lastScrollPositionY = window.scrollY;
+
+        if (window.scrollY === lastScrollPositionY) {
+            setTimeout(() => {
+                console.log('hey');
+                pageHeader.classList.add('hide');
+                pageHeader.classList.remove('show');
+            }, 2000)
+        }
+    }
+
+    lastScrollPositionY = window.scrollY;
+})
+
