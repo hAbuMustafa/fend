@@ -76,8 +76,20 @@ section {
     display: inline-block;
 }
 
+@media only screen and (max-width:600px) {
+    .navbar__menu .menu__link {
+        display: block;
+    }
+}
+
+@media only screen and (min-width:600px) {
+    .navbar__menu .menu__link {
+        display: inline-block;
+    }
+}
+
 .navbar__menu .menu__link {
-    display: inline-block;
+    /* display: inline-block; */
     padding: 1em;
     font-weight: bold;
     text-decoration: none;
@@ -91,7 +103,7 @@ section {
 }
 
 .navbar__menu .active {
-    background: #333;
+    background: rgb(49, 98, 231);
     color: #fff;
     transition: ease 0.3s all;
 }

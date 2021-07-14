@@ -67,7 +67,7 @@ function populateNavBar() {
     sectionTitles.forEach((sectionTitle) => {
         let anchor = document.createElement('a');
         anchor.className = 'menu__link';
-        anchor.href = "";
+        anchor.href = ""; //to have the default pointer cursor when hovered over
         let listItem = document.createElement('li');
         listItem.innerText = sectionTitle.getAttribute('data-nav');
         anchor.appendChild(listItem);
