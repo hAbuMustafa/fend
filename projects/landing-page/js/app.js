@@ -65,8 +65,22 @@ footerIntersectionObserver.observe(pageFooter);
 // build the nav
 function populateNavBar() {
     sectionTitles.forEach((sectionTitle) => {
-        let listItem = `<a href="#${sectionTitle.id}" class='menu__link'><li>${sectionTitle.getAttribute('data-nav')}</li></a>`;
-        navBarList.innerHTML += listItem;
+        let anchor = document.createElement('a');
+        anchor.className = 'menu__link';
+        anchor.href = "";
+        let listItem = document.createElement('li');
+        listItem.innerText = sectionTitle.getAttribute('data-nav');
+        anchor.appendChild(listItem);
+        anchor.addEventListener('click', (e) => {
+            e.preventDefault();
+            for (section of sectionTitles) {
+                if (section.getAttribute('data-nav') === sectionTitle.getAttribute('data-nav')) {
+                    section.scrollIntoView({ behavior: "smooth" });
+                }
+            }
+        });
+        navBarList.appendChild(anchor);
+        // let listItem = `<a href="#${sectionTitle.id}" class='menu__link'><li>${sectionTitle.getAttribute('data-nav')}</li></a>`;
     })
     menuList = Array.from(navBarList.querySelectorAll('.menu__link'));
 }
@@ -81,7 +95,9 @@ function addSectionTitleObserver() {
 
 
 // Scroll to anchor ID using scrollTO event
+function scrollToSection(e, sectionTitle) {
 
+}
 
 /**
  * End Main Functions
