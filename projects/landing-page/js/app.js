@@ -19,19 +19,20 @@
 */
 const pageHeader = document.querySelector('.page__header');
 const pageFooter = document.querySelector('.page__footer');
-const sectionTitles = Array.from(document.querySelectorAll('.section__title'));
+const sectionTitles = Array.from(document.querySelectorAll('.section__title')); // converted to an array on fetching.
 const navBarList = document.querySelector('#navbar__list');
 var menuList;
-const intersectionObserver = new IntersectionObserver(intersectionObserverCallback, { threshold: 1 });
+const sectionsIntersectionObserver = new IntersectionObserver(sectionsIntersectionObserverCallback, { threshold: 1 });
 const footerIntersectionObserver = new IntersectionObserver(bottomReached, { threshold: 0.1 });
 const toTopButton = document.querySelector('.scroll__top');
+// A variable to validate if the scroll was scroll-up or scroll-down
 var lastScrollPositionY = 0;
 /**
  * End Global Variables
  * Start Helper Functions
  * 
  */
-function intersectionObserverCallback(entry) {
+function sectionsIntersectionObserverCallback(entry) {
     const target = entry[0].target.parentElement.parentElement;
     if (entry[0].intersectionRatio === 1) {
         target.classList.add('your-active-class');
@@ -67,7 +68,7 @@ function populateNavBar() {
     sectionTitles.forEach((sectionTitle) => {
         let anchor = document.createElement('a');
         anchor.className = 'menu__link';
-        anchor.href = ""; //to have the default pointer cursor when hovered over
+        anchor.href = ""; // to have the default 'pointer' cursor when hovered over
         let listItem = document.createElement('li');
         listItem.innerText = sectionTitle.getAttribute('data-nav');
         anchor.appendChild(listItem);
@@ -89,15 +90,13 @@ function populateNavBar() {
 // Add class 'active' to section when near top of viewport
 function addSectionTitleObserver() {
     for (sectionTitle of sectionTitles) {
-        intersectionObserver.observe(sectionTitle.querySelector('h2'));
+        sectionsIntersectionObserver.observe(sectionTitle.querySelector('h2'));
     }
 }
 
 
 // Scroll to anchor ID using scrollTO event
-function scrollToSection(e, sectionTitle) {
-
-}
+// anonymous function was used instead
 
 /**
  * End Main Functions
@@ -116,8 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // Set sections as active
 addSectionTitleObserver();
 
-
-//Hide navigation menu when scrolling down and show it when scrolling up
+// Hide navigation menu when scrolling down and show it when scrolling up
+// Using an event listener for scrolling. variable lastScrollPositionY helps detect if scroll is scroll-up or down, by calculating from last registered scroll position.
 window.addEventListener('scroll', (e) => {
     if (lastScrollPositionY - window.scrollY < 0) {
         pageHeader.classList.add('hide');
@@ -127,13 +126,14 @@ window.addEventListener('scroll', (e) => {
         pageHeader.classList.remove('hide');
 
         lastScrollPositionY = window.scrollY;
-
+        
+        // If user is scrolling up, add some delay (3.5s) before hiding the navbar to allow the user to pick a section.
         if (window.scrollY === lastScrollPositionY) {
             setTimeout(() => {
                 console.log('hey');
                 pageHeader.classList.add('hide');
                 pageHeader.classList.remove('show');
-            }, 2000)
+            }, 3500)
         }
     }
 
